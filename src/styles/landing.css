@@ -1,0 +1,21 @@
+.navbar{
+    height: 3.5rem;
+    width: 100%;
+    display:flex;
+    flex-direction: row;
+    border: solid #55a098 0.1px;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #EFFFFD;
+}
+
+.rightside{
+    margin-right: 2rem;
+    width: 6rem;
+    display:flex;
+    justify-content:space-evenly ;
+}
+
+#logo{
+    margin-left: 2rem;
+}
