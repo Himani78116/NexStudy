@@ -7,8 +7,8 @@ const Navbar = () => {
                 <p>NexStudy</p>
             </div>
             <div className="rightside">
-                <a href="#">Contact</a>
-                <a href="#">?</a>
+                <button className="navbtn" id="nbtn1">Log in</button>
+                <button className="navbtn" id="nbtn2">Sign in</button>
             </div>
         </div>
     )

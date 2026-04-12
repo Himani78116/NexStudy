@@ -1,5 +1,5 @@
 .navbar{
-    height: 3.5rem;
+    height: 4.5rem;
     width: 100%;
     display:flex;
     flex-direction: row;
@@ -7,15 +7,72 @@
     align-items: center;
     justify-content: space-between;
     background-color: #EFFFFD;
+    position:sticky;
+    top:0;
 }
 
 .rightside{
     margin-right: 2rem;
-    width: 6rem;
+    width: 15rem;
     display:flex;
     justify-content:space-evenly ;
 }
 
 #logo{
-    margin-left: 2rem;
+    margin-left: 5rem;
+}
+
+.box1{
+    background-color: #f3d7d7;
+    min-height: 40rem;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 2rem;
+}
+
+.navbtn{
+    background-color: #f3d7d7;
+    border-radius: 0.5rem;
+    height: 2rem;
+}
+
+#nbtn1{
+    width: 5rem;
+}
+
+#nbtn2{
+    width:7rem;
+}
+
+#heading{
+    font-size: 3.5rem;
+    margin-top: 1rem;
+    margin-bottom: 0.6rem;
+}
+
+#bottomtext{
+    margin-top: 5rem;
+}
+
+.subheading{
+    font-size: 1.2rem;
+}
+
+#getstarted{
+    border:1px solid grey;
+    border-radius: 0.8rem;
+    width: 7rem;
+    height: 2.5rem;
+    margin-top: 2rem;
+}
+
+#book{
+    margin-top: 3rem;
+}
+.box2{
+    height: 40rem;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
 }

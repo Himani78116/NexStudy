@@ -3,7 +3,7 @@ import Navbar from "../components/navbar";
 import Landing from "../components/main";
 
 export const metadata: Metadata = {
-  title: "NextStudy",
+  title: "NexStudy",
   description: "Exam prep notes app",
 };
 
