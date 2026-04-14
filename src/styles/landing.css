@@ -3,12 +3,13 @@
     width: 100%;
     display:flex;
     flex-direction: row;
-    border: solid #55a098 0.1px;
+    border: solid #2B2A2A 0.1px;
     align-items: center;
     justify-content: space-between;
-    background-color: #EFFFFD;
+    background-color: #2B2A2A;
     position:sticky;
     top:0;
+    color:white;
 }
 
 .rightside{
@@ -23,7 +24,6 @@
 }
 
 .box1{
-    background-color: #f3d7d7;
     min-height: 40rem;
     display:flex;
     flex-direction: column;
@@ -32,9 +32,10 @@
 }
 
 .navbtn{
-    background-color: #f3d7d7;
+    background-color:white;
     border-radius: 0.5rem;
     height: 2rem;
+    color: black;
 }
 
 #nbtn1{
@@ -49,18 +50,23 @@
     font-size: 3.5rem;
     margin-top: 1rem;
     margin-bottom: 0.6rem;
+    color: black;
 }
 
 #bottomtext{
     margin-top: 5rem;
+    color:black;
 }
 
 .subheading{
     font-size: 1.4rem;
+    color: white;
 }
 
 #getstarted{
-    border:1px solid grey;
+    border:1px solid #2B2A2A;
+    background-color: #2B2A2A;
+    color: white;
     border-radius: 0.8rem;
     width: 7.5rem;
     height: 2.6rem;
