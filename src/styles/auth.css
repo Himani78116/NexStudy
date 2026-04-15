@@ -1,0 +1,17 @@
+#signup{
+    background-color: antiquewhite;
+    width: 25rem;
+    height: 28rem;
+    border-radius: 1.5rem;
+    display:flex;
+    flex-direction: column;
+}
+
+#body{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 45rem;
+    width: 100%;
+}
