@@ -14,13 +14,13 @@ const Landing = () => {
                 backgroundImage: `url(${background.src})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                opacity: 0.85
+                opacity: 0.73
                 }} className="box1 min-h-screen">
-                <Image src={book} alt="Logo" width={200} height={200} id="book" />
-                <p id="heading">Score with Confidence</p>
-                <p className="subheading">Turn confusion into clarity with organized exam-ready notes. Clarity for every topic.</p>
-                <p className="subheading">No more wasted study time.</p>
-                <button id="getstarted" onClick={() => router.push('/signup')}> Get started </button>
+                <Image src={book} alt="Logo" width={200} height={200} id="book" className="animated-text"/>
+                <p id="heading" className="animated-text">Score with Confidence</p>
+                <p className="subheading animated-text">Turn confusion into clarity with organized exam-ready notes. Clarity for every topic.</p>
+                <p className="subheading animated-text">No more wasted study time.</p>
+                <button id="getstarted" className="animated-text" onClick={() => router.push('/signup')}> Get started </button>
                 <p id="bottomtext">STUDY WITH NEXSTUDY</p>
             </div>
             <div className="box2">
