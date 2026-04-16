@@ -78,7 +78,7 @@
     margin-top: 1rem;
     margin-bottom: 0.6rem;
     color: rgb(29, 1, 1);
-    font-family: 'Gamabarino', serif; 
+    font-family: 'Gambarino', serif; 
 }
 
 #bottomtext{
@@ -134,5 +134,6 @@ button:hover{
 }
 
 .animated-text {
+  display: inline-block;
   animation: fadeSlideUp 1s ease-out;
 }
