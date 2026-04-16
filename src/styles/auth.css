@@ -1,17 +1,59 @@
-#signup{
-    background-color: antiquewhite;
+.subbox{
+    background-color: white;
     width: 25rem;
-    height: 28rem;
-    border-radius: 1.5rem;
+    height: 23rem;
+    border-radius: 1rem;
     display:flex;
     flex-direction: column;
+    align-items: center;
 }
 
-#body{
+.body{
     display:flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     height: 45rem;
     width: 100%;
+    background: linear-gradient(to right,#575050,#806d56,#bd9c7f);
+}
+
+.element{
+    border: 1px solid black;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    width: 20rem;
+    height:2.5rem;
+    padding-left: 0.5rem;
+    border-radius: 0.4rem;
+}
+
+.title{
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.confirm{
+    margin-top: 0.3rem;
+    background-color: #2B2A2A;
+    color: white;
+}
+
+.confirm:hover{
+    opacity:0.8;
+    cursor:pointer;
+}
+
+.change{
+    display:flex;
+    flex-direction: row;
+}
+
+.alter{
+    margin-left: 0.3rem;
+    font-weight: bold;
+}
+
+.alter:hover{
+    cursor:pointer;
 }
