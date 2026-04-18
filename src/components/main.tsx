@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import "../styles/landing.css"
 import Image from "next/image"
 import book from "../assets/book.png"
-import background from "../assets/background.jpg";
+import background from "../assets/background7.jpg";
 
 const Landing = () => {
     const router = useRouter()
@@ -14,7 +14,7 @@ const Landing = () => {
                 backgroundImage: `url(${background.src})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                opacity: 0.73
+                opacity: 0.9
                 }} className="box1 min-h-screen">
                 <Image src={book} alt="Logo" width={200} height={200} id="book" className="animated-text"/>
                 <p id="heading" className="animated-text">Score with Confidence</p>
