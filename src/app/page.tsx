@@ -1,6 +1,7 @@
 import type { Metadata} from "next";
 import Navbar from "../components/navbar";
 import Landing from "../components/main";
+import Footer from "../components/footer";
 
 export const metadata: Metadata = {
   title: "NexStudy",
@@ -12,6 +13,8 @@ export default function Home() {
     <>
       <Navbar />
       <Landing />
+      <Footer />
+
     </>
   )
 }
