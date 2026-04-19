@@ -16,7 +16,7 @@ const Landing = () => {
                 backgroundPosition: "center",
                 opacity: 0.9
                 }} className="box1 min-h-screen">
-                <Image src={book} alt="Logo" width={200} height={200} id="book" className="animated-text"/>
+                <Image src={book} alt="Logo" width={200} height={200} priority id="book" className="animated-text w-48 h-auto"/>
                 <p id="heading" className="animated-text">Score with Confidence</p>
                 <p className="subheading animated-text">Turn confusion into clarity with organized exam-ready notes. Clarity for every topic.</p>
                 <p className="subheading animated-text">No more wasted study time.</p>
@@ -24,7 +24,38 @@ const Landing = () => {
                 <p id="bottomtext">STUDY WITH NEXSTUDY</p>
             </div>
             <div className="box2">
-                <p>Built for making your preparation easy!</p>
+                <h2 className="working">How does NexStudy work?</h2>
+                <div className='boxof2'>
+
+                </div>
+                <div className='boxof2'>
+                    
+                </div>
+                <div className='boxof2'>
+                    
+                </div>
+                <div className='boxof2'>
+                    
+                </div>
+            </div>
+            <div className="box3">
+                <p className="text1 bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent">Built for making your preparation easy!</p>
+                <div className="horizontal-section">
+                    <div className="scroll-container">
+                        <div className="card"></div>
+                        <div className="card"></div>
+                        <div className="card"></div>
+                        <div className="card"></div>
+                        <div className="card"></div>
+
+                        <div className="card"></div>
+                        <div className="card"></div>
+                        <div className="card"></div>
+                        <div className="card"></div>
+                        <div className="card"></div>
+                    </div>
+                </div>
+                <p className='b3bt'>Ease your preparation with NexStudy.</p>
             </div>
         </main>
     )

@@ -1,3 +1,8 @@
+body::-webkit-scrollbar {
+  display: none;
+}
+
+
 .navbar{
     height: 4.5rem;
     width: 100%;
@@ -26,7 +31,7 @@
 
 @font-face {
   font-family: 'Zodiak';
-  src: url('/assets/fonts/Zodiak-Bold.otf') format('opentype');
+  src: url('../assets/fonts/Zodiak-Bold.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -40,6 +45,16 @@
   font-display: swap;
 
 } 
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url('../assets/fonts/ClashDisplay-Light.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+
+} 
+
 
 @font-face {
   font-family: 'Boska';
@@ -89,8 +104,9 @@
 }
 
 .subheading{
-    font-size: 1.4rem;
-    color:black;
+    font-size: 1.5rem;
+    color:rgb(31, 30, 30);
+    font-weight: lighter;
 }
 
 #getstarted{
@@ -103,16 +119,22 @@
     margin-top: 2.2rem;
 }
 
-
-
 #book{
     margin-top: 3rem;
 }
-.box2{
-    height: 40rem;
+.box3{
+    height: 32rem;
     display:flex;
     flex-direction: column;
     align-items: center;
+    background-color: #FFFFFF;
+}
+
+.text1{
+    margin-top:3.5rem;
+    font-size: 2rem;
+    font-weight: bolder;
+    font-family: 'Gambarino', serif;
 }
 
 button{
@@ -138,4 +160,93 @@ button:hover{
 .animated-text {
   display: inline-block;
   animation: fadeSlideUp 1s ease-out;
+}
+
+.footer{
+    background-color: #2B2A2A;
+    height: 30rem;
+    width:100%;
+    display:flex;
+    flex-direction: column;
+    
+}
+
+.horizontal-section{
+    margin-top: 2rem;
+    height: 15rem;
+    width: 100%;
+    background-color: transparent;
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: relative;
+}
+
+.horizontal-section::-webkit-scrollbar {
+  display: none;
+}
+
+.horizontal-section {
+  scroll-behavior: smooth;
+}
+
+.scroll-container {
+  display: flex;
+  gap: 2.5rem;
+  width: max-content;
+  animation: scroll 25s linear infinite;
+  background-color: transparent;
+  height: 100%
+}
+
+.scroll-container:hover {
+  animation-play-state: paused;
+}
+
+.card {
+  width:25rem;
+  height: 100%;
+  background: transparent;
+  border: 1px solid #014b14;
+  border-radius: 10px;
+  flex-shrink: 0; 
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.boxof2{
+    height: 25rem;
+    width: 75%;
+    background-color: rgb(150, 227, 196);
+    border-radius: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.box2{
+    height:125rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f1f0f0;
+}
+
+.working{
+    font-size: 2.5rem;
+    font-family: "Zodiak", serif;
+    font-weight: 200;
+    margin-top: 3.5rem;
+    margin-bottom: 2.5rem;
+    color: rgb(69, 12, 12);
+}
+
+.b3bt{
+    margin-top: 2rem;
+    font-size: 1.3rem;
+    color:#09641f;
 }
