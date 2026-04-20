@@ -164,10 +164,11 @@ button:hover{
 
 .footer{
     background-color: #2B2A2A;
-    height: 30rem;
+    height: 20rem;
     width:100%;
     display:flex;
     flex-direction: column;
+    align-items: center;
     
 }
 
@@ -223,9 +224,10 @@ button:hover{
 .boxof2{
     height: 25rem;
     width: 75%;
-    background-color: rgb(150, 227, 196);
     border-radius: 2rem;
     margin-bottom: 2.5rem;
+    display: flex;
+    flex-direction: row;
 }
 
 .box2{
@@ -237,8 +239,8 @@ button:hover{
 }
 
 .working{
-    font-size: 2.5rem;
-    font-family: "Zodiak", serif;
+    font-size: 2.3rem;
+    font-family: 'Gambarino', serif; 
     font-weight: 200;
     margin-top: 3.5rem;
     margin-bottom: 2.5rem;
@@ -248,5 +250,103 @@ button:hover{
 .b3bt{
     margin-top: 2rem;
     font-size: 1.3rem;
-    color:#09641f;
+    color:rgb(19, 81, 28);
 }
+
+.footer1{
+  height: 80%;
+  width:100%;
+  display: flex;
+  flex-direction: row;
+  align-items:flex-start;
+  justify-content: space-around;
+  padding-top: 2rem;
+}
+
+.end-text{
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+.horiz{
+  border: none;
+  width: 90%;
+  height: 1px;
+  background-color: white;
+  margin: 1rem 0;
+}
+
+.cardbox1{
+  background-color: transparent;
+  width: 47%;
+  height: 100%;
+}
+
+.cardbox2{
+  width: 53%;
+  height: 100%;
+  background-color: #FFFFFF;
+  border-radius: 2rem;
+}
+
+.cardbox4{
+  background-color: transparent;
+  width: 47%;
+  height: 100%;
+}
+
+.cardbox3{
+  width: 53%;
+  height: 100%;
+  background-color: #FFFFFF;
+  border-radius: 2rem;
+}
+
+.cardbox5{
+  background-color: transparent;
+  width: 47%;
+  height: 100%;
+}
+
+.cardbox6{
+  width: 53%;
+  height: 100%;
+  background-color: #FFFFFF;
+  border-radius: 2rem;
+}
+
+.cardbox8{
+  background-color: transparent;
+  width: 47%;
+  height: 100%;
+}
+
+.cardbox7{
+  width: 53%;
+  height: 100%;
+  background-color: #FFFFFF;
+  border-radius: 2rem;
+}
+
+.box1of2{
+  /* background-color: rgb(16, 151, 63); */
+  background: linear-gradient(to right,#226801,#73b573,#a9cca9);
+}
+
+.box2of2{
+  /* background-color: #5055ce; */
+  background: linear-gradient(to right,#d7d8f0,#888ccb,#131bb3);
+}
+
+.box3of2{
+  background: linear-gradient(to right,#d7d8f0,#888ccb,#131bb3);
+}
+
+.box4of2{
+  background: linear-gradient(to right,#d7d8f0,#888ccb,#131bb3);
+}
+
+.f{
+  color: white;
+}
+
