@@ -3,10 +3,13 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { useRouter } from 'next/navigation'
+import type { Branch } from '../../types'
 
 export default function Dashboard() {
+  const [branches, setBranches] = useState<Branch[]>([])
   const [role, setRole] = useState<string | null>(null)
   const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
 
   useEffect(() => {
@@ -25,6 +28,14 @@ export default function Dashboard() {
         .single()
 
       setRole(profile?.role ?? 'user')
+
+      // Fetch all branches
+      const { data } = await supabase
+        .from('branches')
+        .select('*')
+        .order('name')
+      setBranches(data ?? [])
+      setLoading(false)
     }
     load()
   }, [])
@@ -54,7 +65,20 @@ export default function Dashboard() {
           <p style={{ color: '#555' }}>
             Select your branch to start studying.
           </p>
-          {/* User branch selector comes next — not built yet */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 16 }}>
+        {branches.map(branch => (
+          <div key={branch.id}
+            onClick={() => router.push(`/semester/${branch.id}`)}
+            style={{ padding: '20px 24px', borderRadius: 10,
+              border: '1px solid #e5e5e5', cursor: 'pointer',
+              background: '#fff', transition: 'border-color 0.15s' }}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = '#111')}
+            onMouseLeave={e => (e.currentTarget.style.borderColor = '#e5e5e5')}>
+            <p style={{ fontWeight: 600, fontSize: 16, marginBottom: 4 }}>{branch.name}</p>
+            <p style={{ color: '#888', fontSize: 13 }}>{branch.code}</p>
+          </div>
+        ))}
+      </div>
         </div>
       )}
     </div>

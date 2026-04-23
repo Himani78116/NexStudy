@@ -23,6 +23,12 @@ export default function CrudList({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  function getItemId(item: Record<string, any>) {
+    if (item?.id) return item.id
+    const idKey = Object.keys(item ?? {}).find(k => k.endsWith('_id') && item[k])
+    return idKey ? item[idKey] : undefined
+  }
+
   async function load() {
     setLoading(true)
     try {
@@ -95,13 +101,17 @@ export default function CrudList({
             <p style={{ color: '#888' }}>No {label.toLowerCase()}s yet. Add one above.</p>
           )}
           {items.map(item => (
-            <div key={item.id} style={{
+            <div key={String(getItemId(item) ?? `${table}-${item[nameField] ?? 'row'}`)} style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               padding: '12px 16px', borderRadius: 8, border: '1px solid #e5e5e5',
               background: '#fafafa'
             }}>
               <span
-                onClick={() => onSelect?.(item)}
+                onClick={() => {
+                  if (!onSelect) return
+                  const resolvedId = getItemId(item)
+                  onSelect(resolvedId ? { ...item, id: resolvedId } : item)
+                }}
                 style={{ cursor: onSelect ? 'pointer' : 'default',
                   fontWeight: 500, flex: 1, fontSize: 14 }}>
                 {item[nameField]}
@@ -119,7 +129,14 @@ export default function CrudList({
                   <span style={{ marginLeft: 8, color: '#888', fontSize: 12 }}>→</span>
                 )}
               </span>
-              <button onClick={() => handleDelete(item.id)}
+              <button onClick={() => {
+                const resolvedId = getItemId(item)
+                if (!resolvedId) {
+                  setError(`Cannot delete ${label.toLowerCase()}: missing id field in row data.`)
+                  return
+                }
+                handleDelete(String(resolvedId))
+              }}
                 style={{ background: 'none', border: 'none', color: '#e53e3e',
                   cursor: 'pointer', fontSize: 13 }}>
                 Delete
