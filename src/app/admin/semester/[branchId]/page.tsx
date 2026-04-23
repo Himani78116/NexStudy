@@ -2,10 +2,12 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import type { Semester, Branch } from '@/types'
 
-export default function SemesterPage({ params }: { params: { branchId: string } }) {
+export default function SemesterPage() {
+	const params = useParams()
+  const branchId = params?.branchId as string
   const [branch, setBranch] = useState<Branch | null>(null)
   const [semesters, setSemesters] = useState<Semester[]>([])
   const [loading, setLoading] = useState(true)
@@ -17,7 +19,7 @@ export default function SemesterPage({ params }: { params: { branchId: string } 
       const { data: b } = await supabase
         .from('branches')
         .select('*')
-        .eq('id', params.branchId)
+        .eq('id', branchId)
         .single()
       setBranch(b)
 
@@ -25,7 +27,7 @@ export default function SemesterPage({ params }: { params: { branchId: string } 
       const { data } = await supabase
         .from('semesters')
         .select('*')
-        .eq('branch_id', params.branchId)
+        .eq('branch_id', branchId)
         .order('number')
       setSemesters(data ?? [])
       setLoading(false)
