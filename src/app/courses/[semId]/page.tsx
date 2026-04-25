@@ -20,70 +20,89 @@ export default function CoursesPage() {
 
   useEffect(() => {
     async function load() {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/login'); return }
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) { router.push('/login'); return }
 
-      // Fetch semester info
-      const { data: semData } = await supabase
-        .from('semesters')
-        .select('*, branches(name, code)')
-        .eq('id', semId)
-        .single()
-      setSem(semData)
+        // Fetch semester info
+        const { data: semData } = await supabase
+          .from('semesters')
+          .select('*, branches(name, code)')
+          .eq('id', semId)
+          .single()
+        setSem(semData)
 
-      // Fetch courses for this semester
-      const { data: coursesData } = await supabase
-        .from('courses')
-        .select('*')
-        .eq('semester_id', semId)
-        .order('name')
+        // Fetch courses for this semester
+        const { data: coursesData } = await supabase
+          .from('courses')
+          .select('*')
+          .eq('semester_id', semId)
+          .order('name')
 
-      if (!coursesData) { setLoading(false); return }
+        if (!coursesData || coursesData.length === 0) {
+          setCourses([])
+          setLoading(false)
+          return
+        }
 
-      // For each course, count total topics and completed topics
-      const withProgress = await Promise.all(
-        coursesData.map(async (course) => {
-          // Get all topic IDs under this course
-          const { data: units } = await supabase
-            .from('units')
-            .select('id')
-            .eq('course_id', course.id)
+        const courseIds = coursesData.map(c => c.id)
 
-          const unitIds = (units ?? []).map(u => u.id)
+        // 1. Fetch all units for these courses
+        const { data: allUnits } = await supabase
+          .from('units')
+          .select('id, course_id')
+          .in('course_id', courseIds)
 
-          if (unitIds.length === 0) {
-            return { ...course, totalTopics: 0, completedTopics: 0 }
-          }
+        const unitIds = (allUnits ?? []).map(u => u.id)
 
-          const { data: topics } = await supabase
+        // 2. Fetch all topics for these units
+        let allTopics: any[] = []
+        if (unitIds.length > 0) {
+          const { data: topicsData } = await supabase
             .from('topics')
-            .select('id')
+            .select('id, unit_id')
             .in('unit_id', unitIds)
+          allTopics = topicsData ?? []
+        }
 
-          const topicIds = (topics ?? []).map(t => t.id)
-          const totalTopics = topicIds.length
+        const topicIds = allTopics.map(t => t.id)
 
-          if (totalTopics === 0) {
-            return { ...course, totalTopics: 0, completedTopics: 0 }
-          }
-
-          // Count how many of those topics this user completed
-          const { count } = await supabase
+        // 3. Fetch all completed progress for this user
+        let completedTopicIds = new Set<string>()
+        if (topicIds.length > 0) {
+          const { data: progressData } = await supabase
             .from('user_progress')
-            .select('*', { count: 'exact', head: true })
+            .select('topic_id')
             .eq('user_id', user.id)
             .eq('completed', true)
             .in('topic_id', topicIds)
+          
+          if (progressData) {
+            completedTopicIds = new Set(progressData.map(p => p.topic_id))
+          }
+        }
 
-          return { ...course, totalTopics, completedTopics: count ?? 0 }
+        // Process in-memory
+        const withProgress = coursesData.map(course => {
+          const courseUnits = (allUnits ?? []).filter(u => u.course_id === course.id)
+          const courseUnitIds = courseUnits.map(u => u.id)
+          const courseTopics = allTopics.filter(t => courseUnitIds.includes(t.unit_id))
+          
+          const totalTopics = courseTopics.length
+          const completedTopics = courseTopics.filter(t => completedTopicIds.has(t.id)).length
+
+          return { ...course, totalTopics, completedTopics }
         })
-      )
 
-      setCourses(withProgress)
-      setLoading(false)
+        setCourses(withProgress)
+      } catch (err) {
+        console.error('Error loading courses:', err)
+      } finally {
+        setLoading(false)
+      }
     }
     load()
-  }, [])
+  }, [semId, router])
 
   if (loading) return <p style={{ padding: 32 }}>Loading...</p>
 

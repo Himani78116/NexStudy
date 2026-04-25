@@ -55,10 +55,25 @@ body::-webkit-scrollbar {
 
 } 
 
+@font-face {
+  font-family: 'Supreme';
+  src: url('../assets/fonts/Supreme-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 @font-face {
   font-family: 'Boska';
-  src: url('/assets/fonts/Boska-Black.otf') format('opentype');
+  src: url('../assets/fonts/Boska-Black.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GeneralSans';
+  src: url('../assets/fonts/GeneralSans-Light.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -106,7 +121,7 @@ body::-webkit-scrollbar {
 .subheading{
     font-size: 1.5rem;
     color:rgb(31, 30, 30);
-    font-weight: lighter;
+    font-family: 'GeneralSans', sans-serif;
 }
 
 #getstarted{
@@ -172,6 +187,7 @@ button:hover{
     
 }
 
+
 .horizontal-section{
     margin-top: 2rem;
     height: 15rem;
@@ -210,6 +226,24 @@ button:hover{
   border: 1px solid #014b14;
   border-radius: 10px;
   flex-shrink: 0; 
+  display:flex;
+  flex-direction: column;
+  align-items: left;
+  
+  padding: 2rem;
+}
+
+.top1{
+  font-size: 1.5rem;
+  font-family: 'Supreme', serif;
+  margin-top: -2rem;
+}
+
+.rest1{
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  font-family: 'GeneralSans', sans-serif;
+
 }
 
 @keyframes scroll {
@@ -219,6 +253,11 @@ button:hover{
   100% {
     transform: translateX(-50%);
   }
+}
+
+.rest{
+  font-family: 'GeneralSans', sans-serif; 
+  font-size: 1.3rem;
 }
 
 .boxof2{
@@ -280,6 +319,27 @@ button:hover{
   background-color: transparent;
   width: 47%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+
+}
+
+#space1{
+  margin-top: 2rem;
+}
+
+.demo{
+  background-color: white;
+  width: 15rem;
+  height: 2.5rem;
+  margin-top: 0.3rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  padding-left: 0.8rem;
+  border-radius: 0.7rem;
+  border: 1px solid grey;
 }
 
 .cardbox2{
@@ -293,6 +353,52 @@ button:hover{
   background-color: transparent;
   width: 47%;
   height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.innerbox{
+  background-color: white;
+  height: 99%;
+  width: 75%;
+  border-radius: 1rem;
+  border: 1px solid grey;
+  display:flex;
+  flex-direction: column;
+  padding: 2rem;
+}
+
+.unit_p{
+  color:rgb(179, 178, 178);
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.unit1{
+  margin-top: 1rem;
+}
+
+.progress{
+  width:15rem;
+  height:8px;
+  background:#e5e7eb;
+  border-radius:999px;
+}
+
+.fill1{
+  width:65%; 
+  height:100%;
+  background:#6f6f70;
+  border-radius:999px;
+}
+
+.fill{
+  width:80%; 
+  height:100%;
+  background:#6f6f70;
+  border-radius:999px;
 }
 
 .cardbox3{
@@ -328,6 +434,26 @@ button:hover{
   border-radius: 2rem;
 }
 
+.cardbox1, .cardbox2, .cardbox3, .cardbox4, .cardbox5, .cardbox6, .cardbox7, .cardbox8{
+  display:flex;
+  flex-direction: column;
+  padding: 3rem;
+  align-items: left;
+  justify-content: center;
+}
+
+.top{
+  font-size: 2rem;
+  margin-top: -2rem;
+  margin-bottom: 1rem;
+  font-family: 'Supreme', serif;
+}
+
+#rowbelow{
+  margin-top: -1.5rem;
+  font-family: 'GeneralSans', sans-serif; 
+}
+
 .box1of2{
   /* background-color: rgb(16, 151, 63); */
   background: linear-gradient(to right,#226801,#73b573,#a9cca9);
@@ -339,11 +465,11 @@ button:hover{
 }
 
 .box3of2{
-  background: linear-gradient(to right,#d7d8f0,#888ccb,#131bb3);
+  background: linear-gradient(to right,rgb(102, 11, 11),rgb(222, 138, 138),rgb(244, 243, 243));
 }
 
 .box4of2{
-  background: linear-gradient(to right,#d7d8f0,#888ccb,#131bb3);
+  background: linear-gradient(to right,#f0e2d7,#efaa76,#f86e04);
 }
 
 .f{
