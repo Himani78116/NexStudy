@@ -5,9 +5,11 @@ import "../styles/landing.css"
 import Image from "next/image"
 import book from "../assets/book.png"
 import background from "../assets/background7.jpg";
+import AnimatedText from "../components/AnimatedText";
 
 const Landing = () => {
     const router = useRouter()
+    
 
     return(
         <main>
@@ -18,9 +20,9 @@ const Landing = () => {
                 opacity: 0.9
                 }} className="box1 min-h-screen" id="home">
                 <Image src={book} alt="Logo" width={200} height={200} priority id="book" className="animated-text w-48 h-auto"/>
-                <p id="heading" className="animated-text">Score with Confidence</p>
-                <p className="subheading animated-text">Turn confusion into clarity with organized exam-ready notes. Clarity for every topic.</p>
-                <p className="subheading animated-text">No more wasted study time.</p>
+                <AnimatedText text="Score with Confidence" className="animated-text heading" />
+                <AnimatedText text="Turn confusion into clarity with organized exam-ready notes. Clarity for every topic." className="subheading animated-text" />
+                <AnimatedText text="No more wasted study time." className="subheading animated-text"/>
                 <button id="getstarted" className="animated-text" onClick={() => router.push('/signup')}> Get started </button>
                 <p id="bottomtext">STUDY WITH NEXSTUDY</p>
             </div>
@@ -211,7 +213,7 @@ const Landing = () => {
                         <div className="card"></div>
                     </div>
                 </div>
-                <p className='b3bt'>Ease your preparation with NexStudy.</p>
+                <AnimatedText text="Ease your preparation with NexStudy." className='b3bt' />
             </div>
         </main>
     )
