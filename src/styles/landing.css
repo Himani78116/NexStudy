@@ -47,6 +47,16 @@ body::-webkit-scrollbar {
 } 
 
 @font-face {
+  font-family: 'Britney';
+  src: url('../assets/fonts/Britney-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+
+} 
+
+
+@font-face {
   font-family: 'ClashDisplay';
   src: url('../assets/fonts/ClashDisplay-Light.otf') format('opentype');
   font-weight: 700;
@@ -63,9 +73,21 @@ body::-webkit-scrollbar {
   font-display: swap;
 }
 
+.style{
+  font-family: "Telma", serif;
+}
+
 @font-face {
   font-family: 'Boska';
   src: url('../assets/fonts/Boska-Black.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Telma';
+  src: url('../assets/fonts/Telma-Bold.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -105,7 +127,7 @@ body::-webkit-scrollbar {
     width:7rem;
 }
 
-#heading{
+.heading{
     font-size: 3.8rem;
     margin-top: 1rem;
     margin-bottom: 0.6rem;
