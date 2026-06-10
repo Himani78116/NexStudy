@@ -18,6 +18,7 @@ Welcome to **NexStudy**! NexStudy is a platform for university students to find 
 ## 🛠️ Tech Stack
 
 *   **Framework:** [Next.js 16](https://nextjs.org/) (App Router) 
+*   **Library:** [React](https://react.dev/) 
 *   **Language:** [TypeScript](https://www.typescriptlang.org/) 
 *   **Backend & Auth:** [Supabase](https://supabase.com/)
 *   **Styling:** [Tailwind CSS 4](https://tailwindcss.com/) & Vanilla CSS — Making things look sharp with minimal effort. 💅
