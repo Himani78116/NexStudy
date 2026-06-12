@@ -1,4 +1,4 @@
-# NexStudy 🎓
+# NexStudy 
 
 Welcome to **NexStudy**! NexStudy is a platform for university students to find organized, topic-wise notes. No more chaos. Just pure, organized knowledge with a side of progress tracking to keep you sane.
 
@@ -6,12 +6,12 @@ Welcome to **NexStudy**! NexStudy is a platform for university students to find 
 
 ## Features
 
-*   ** Structured Learning:** Notes are organized by Branches → Semesters → Courses → Units → Topics. It’s like a filing cabinet, but actually cool.
-*   ** Progress Tracking:** Keep tabs on what you've mastered and what still looks like ancient hieroglyphics.
-*   ** User Dashboard:** Students can track their study progress and see completed topics.
-*   ** Admin Dashboard:** A control panel for contributors to manage the curriculum and upload new notes.
-*   ** Progress Tracking:** Visual indicators to show how much of a course or unit has been completed.
-*   ** Secure Auth:** User accounts and data are managed through Supabase.
+*   **Structured Learning:** Notes are organized by Branches → Semesters → Courses → Units → Topics. It’s like a filing cabinet, but actually cool.
+*   **Progress Tracking:** Keep tabs on what you've mastered and what still looks like ancient hieroglyphics.
+*   **User Dashboard:** Students can track their study progress and see completed topics.
+*   **Admin Dashboard:** A control panel for contributors to manage the curriculum and upload new notes.
+*   **Progress Tracking:** Visual indicators to show how much of a course or unit has been completed.
+*   **Secure Auth:** User accounts and data are managed through Supabase.
 
 ---
 
@@ -94,7 +94,7 @@ nexstudy/
 ## Contributing
 We love contributors! Whether you're fixing a typo or building a whole new feature, here's how you can help:
 
-1.  **Fork the repo** 🍴
+1.  **Fork the repo** 
 2.  **Create your feature branch** (`git checkout -b feature/AmazingFeature`)
 3.  **Commit your changes** (`git commit -m 'Add some AmazingFeature'`)
 4.  **Push to the branch** (`git push origin feature/AmazingFeature`)
