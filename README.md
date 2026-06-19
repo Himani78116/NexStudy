@@ -114,4 +114,4 @@ This project is licensed under the MIT License.
 
 Feel free to reach out if you have any questions.
 
-**Happy Studying! **
+**Happy Studying!**
