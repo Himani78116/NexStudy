@@ -27,7 +27,7 @@ const Landing = () => {
                 <p id="bottomtext">STUDY WITH NEXSTUDY</p>
             </div>
             <div className="box2" id="how-it-works">
-                <div style={{overflow:"hidden"}} className="working">
+                <div style={{overflow:"hidden", textAlign:"center"}} className="working">
                 <motion.h1
                 initial={{y:"100%"}}
                 whileInView={{y:0}}

@@ -398,6 +398,97 @@ button:hover{
   font-weight: bold;
 }
 
+@media (max-width: 768px){
+    .cardbox1{
+        width: 100%;
+        height: 38%;
+    }
+}
+
+@media (max-width: 768px){
+    .cardbox2{
+        width: 100%;
+        height: 62%;
+       
+    }
+}
+
+@media (max-width: 768px){
+    .boxof2.box1of2{
+      display:flex;
+      flex-direction: column;
+
+  }
+}
+
+@media (max-width: 768px){
+    .boxof2.box2of2{
+      display:flex;
+      flex-direction: column;
+
+  }
+}
+
+@media (max-width: 768px){
+    .boxof2.box3of2{
+      display:flex;
+      flex-direction: column;
+
+  }
+}
+
+
+@media (max-width: 768px){
+    .boxof2.box4of2{
+      display:flex;
+      flex-direction: column;
+
+  }
+}
+
+
+@media (max-width: 768px){
+    .cardbox3{ /* Text content card, like cardbox2, should take 62% height */
+        width: 100%;
+        height: 62%;
+    }
+}
+
+@media (max-width: 768px){
+    .cardbox4{ /* Interactive content card, like cardbox1, should take 38% height */
+        width: 100%;
+        height: 38%;
+    }
+}
+
+@media (max-width: 768px){
+    .cardbox5{ /* Interactive card, similar to cardbox1 */
+        width: 100%;
+        height: 38%;
+    }
+}
+
+@media (max-width: 768px){
+    .cardbox6{ /* Text card, similar to cardbox2 */
+        width: 100%;
+        height: 62%;
+    }
+}
+
+@media (max-width: 768px){
+    .cardbox7{ /* Text card, similar to cardbox2 */
+        width: 100%;
+        height: 62%;
+    }
+}
+
+@media (max-width: 768px){
+    .cardbox8{ /* Interactive card, similar to cardbox1 */
+        width: 100%;
+        height: 38%;
+    }
+}
+
 .unit1{
   margin-top: 1rem;
 }
