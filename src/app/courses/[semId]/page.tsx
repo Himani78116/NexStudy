@@ -24,20 +24,64 @@ export default function CoursesPage() {
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) { router.push('/login'); return }
 
-        // Fetch semester info
-        const { data: semData } = await supabase
-          .from('semesters')
-          .select('*, branches(name, code)')
+        // Fetch semester info from branch_semesters joining branches and semesters
+        const { data: branchSemData } = await supabase
+          .from('branch_semesters')
+          .select(`
+            id,
+            branch_id,
+            semester_id,
+            branches (
+              id,
+              name,
+              code
+            ),
+            semesters (
+              id,
+              number
+            )
+          `)
           .eq('id', semId)
           .single()
-        setSem(semData)
 
-        // Fetch courses for this semester
-        const { data: coursesData } = await supabase
-          .from('courses')
-          .select('*')
-          .eq('semester_id', semId)
-          .order('name')
+        if (branchSemData) {
+          const semObj = branchSemData.semesters
+          const num = Array.isArray(semObj)
+            ? (semObj[0] as any)?.number
+            : (semObj as any)?.number
+
+          const branchesObj = branchSemData.branches
+          const branch = Array.isArray(branchesObj)
+            ? branchesObj[0]
+            : branchesObj
+
+          setSem({
+            id: branchSemData.id,
+            number: num,
+            branch_id: branchSemData.branch_id,
+            branches: branch
+          } as any)
+        }
+
+        // Fetch courses for this branch_semester via semester_course join table
+        const { data: relData } = await supabase
+          .from('semester_course')
+          .select(`
+            id,
+            course_id,
+            courses (
+              id,
+              name,
+              code,
+              created_at
+            )
+          `)
+          .eq('branch_semesters_id', semId)
+
+        const coursesData = (relData ?? [])
+          .map(item => item.courses)
+          .filter((c): c is any => c !== null)
+          .sort((a, b) => a.name.localeCompare(b.name)) as Course[]
 
         if (!coursesData || coursesData.length === 0) {
           setCourses([])

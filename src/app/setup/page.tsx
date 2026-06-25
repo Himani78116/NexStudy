@@ -43,9 +43,33 @@ export default function SetupPage() {
       setSemesters([])
       return
     }
-    supabase.from('semesters').select('*')
-      .eq('branch_id', selectedBranch).order('number')
-      .then(({ data }) => setSemesters(data ?? []))
+    async function loadSemesters() {
+      const { data, error } = await supabase
+        .from('branch_semesters')
+        .select(`
+          semester_id,
+          semesters (
+            id,
+            number
+          )
+        `)
+        .eq('branch_id', selectedBranch)
+
+      if (error) {
+        console.error('Error fetching semesters:', error)
+        setSemesters([])
+      } else {
+        const formatted = (data ?? [])
+          .filter((item): item is any => item && item.semesters !== null)
+          .map(item => ({
+            id: item.semesters.id,
+            number: item.semesters.number
+          }))
+          .sort((a, b) => a.number - b.number)
+        setSemesters(formatted)
+      }
+    }
+    loadSemesters()
   }, [selectedBranch])
 
   async function handleSave() {
