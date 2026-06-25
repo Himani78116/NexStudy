@@ -63,23 +63,22 @@ export default function CoursesPage() {
           } as any)
         }
 
-        // Fetch courses for this branch_semester via semester_course join table
-        const { data: relData } = await supabase
-          .from('semester_course')
-          .select(`
-            id,
-            course_id,
-            courses (
-              id,
-              name,
-              code,
-              created_at
-            )
-          `)
-          .eq('branch_semesters_id', semId)
+        const actualSemesterId = branchSemData?.semester_id; // Extract actual semester_id
 
+        if (!actualSemesterId) {
+            console.error('Semester ID not found for branch semester ID:', semId);
+            setLoading(false);
+            return;
+        }
+
+        // Fetch courses for this semester via semester_course join table
+        const { data: relData, error: relError } = await supabase
+          .from('semester_course')
+          .select(`id, course_id, courses (id, name, code, created_at)`)
+          .eq('semester_id', actualSemesterId)// Use the actual semester_id
+        
         const coursesData = (relData ?? [])
-          .map(item => item.courses)
+          .map(item => Array.isArray(item.courses) ? item.courses[0] : item.courses)
           .filter((c): c is any => c !== null)
           .sort((a, b) => a.name.localeCompare(b.name)) as Course[]
 
