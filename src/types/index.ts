@@ -8,9 +8,10 @@ export interface Branch {
 
 export interface Semester {
   id: string
-  branch_id: string
+  branch_semesters?: string[] | null
   number: number
   created_at: string
+  branches?: Branch
 }
 
 export interface Course {

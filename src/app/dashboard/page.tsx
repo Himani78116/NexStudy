@@ -54,14 +54,18 @@ export default function Dashboard() {
         }
 
         // 2. Fetch Progress
-        const semId = profileData.semester_id
-        
-        // Fetch all courses for this semester
-        const { data: courses } = await supabase
-          .from('courses')
-          .select('*')
-          .eq('semester_id', semId)
-          .order('name')
+        let courses: Course[] = []
+        const { data: relData, error: relError } = await supabase
+          .from('semester_course')
+          .select(`courses (id, name, code, created_at)`)
+          .eq('semester_id', profileData.semester_id)
+
+        if (relData) {
+        courses = relData
+          .map(item => Array.isArray(item.courses) ? item.courses[0] : item.courses)
+          .filter((c): c is any => c !== null)
+          .sort((a, b) => a.name.localeCompare(b.name)) as Course[]
+        }
 
         if (!courses || courses.length === 0) {
           setProgress({ overallPct: 0, totalTopics: 0, completedTopics: 0, courses: [] })
