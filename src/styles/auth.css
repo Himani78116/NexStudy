@@ -84,3 +84,36 @@
 .alter:hover{
     cursor:pointer;
 }
+
+@media (max-width: 768px) {
+
+    .body {
+        height: 100vh;
+        padding: 1rem;
+    }
+
+    .log {
+        width: 100%;
+        height: auto;
+    }
+
+    .subbox {
+        width: 100%;
+        height: auto;
+        border-radius: 1rem;
+        padding-bottom: 2rem;
+    }
+
+    .image {
+        display: none;
+    }
+
+    .element {
+        width: 85%;
+    }
+
+    .title {
+        margin-top: 3rem;
+        font-size: 2rem;
+    }
+}

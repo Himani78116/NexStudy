@@ -162,27 +162,27 @@ const Landing = () => {
                             <p className="rest1">Designed for students who want organized preparation without wasting time jumping between PDFs, random videos, and scattered resources.</p>
                         </div>
                         <div className="card">
-                            <h4 className='top'>A short strip under hero</h4>
+                            <h4 className='top1'>A short strip under hero</h4>
                             <ol className='rest list-disc pl-6'>
                                 <li>Branch-wise organized content</li>
                                 <li>Semester-wise structured learning</li>
                             </ol>
                         </div>
                         <div className="card">
-                            <h4 className="top">AI doubt solver</h4>
+                            <h4 className="top1">AI doubt solver</h4>
                             <p className='rest'>Stuck on a concept?</p>
                             <br></br>
                             <p className='rest' id="rowbelow"> Ask instantly without leaving your study flow.</p>
                         </div>
                         <div className="card">
-                            <h4 className='top'>One-Click Summarizer</h4>
+                            <h4 className='top1'>One-Click Summarizer</h4>
                             <p className='rest'>
                                 Turn long explanations into revision-ready summaries.
                                 Save important summaries as personal revision assets.
                             </p>
                         </div>
                         <div className="card">
-                            <h4 className='top'>Structured Navigation</h4>
+                            <h4 className='top1'>Structured Navigation</h4>
                             <p className='rest'>Study exactly according to your syllabus hierarchy.</p>
                         </div>
 
@@ -198,19 +198,29 @@ const Landing = () => {
                             </ol>
                         </div>
                         <div className="card">
-                            <h4 className="top">AI doubt solver</h4>
+                            <h4 className="top1">AI doubt solver</h4>
                             <p className='rest'>Stuck on a concept?</p>
                             <br></br>
                             <p className='rest' id="rowbelow"> Ask instantly without leaving your study flow.</p>
                         </div>
                         <div className="card">
-                            <h4 className='top'>One-Click Summarizer</h4>
+                            <h4 className='top1'>One-Click Summarizer</h4>
                             <p className='rest'>
                                 Turn long explanations into revision-ready summaries.
                                 Save important summaries as personal revision assets.
                             </p>
                         </div>
-                        <div className="card"></div>
+                        <div className="card">
+                            <h4 className='top1'>Structured Navigation</h4>
+                            <p className='rest'>Study exactly according to your syllabus hierarchy.</p>
+                        </div>
+                        <div className="card">
+                            <h4 className='top1'>A short strip under hero</h4>
+                            <ol className='rest list-disc pl-6'>
+                                <li>Branch-wise organized content</li>
+                                <li>Semester-wise structured learning</li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
                 <AnimatedText text="Ease your preparation with NexStudy." className='b3bt' />
