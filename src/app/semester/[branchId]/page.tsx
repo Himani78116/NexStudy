@@ -24,13 +24,37 @@ export default function SemesterPage() {
         .single()
       setBranch(b)
 
-      // Fetch semesters for this branch
-      const { data } = await supabase
-        .from('semesters')
-        .select('*')
+      // Fetch semesters through the branch_semesters join table
+      const { data, error } = await supabase
+        .from('branch_semesters')
+        .select(`
+          id,
+          semester_id,
+          semesters (
+            id,
+            number,
+            created_at
+          )
+        `)
         .eq('branch_id', branchId)
-        .order('number')
-      setSemesters(data ?? [])
+
+      if (error) {
+        console.error('Error fetching semesters:', error)
+        setSemesters([])
+      } else {
+        // Extract the nested semester objects and filter out any nulls
+        const fetchedSems = (data ?? [])
+          .filter((item): item is any => item && item.semesters !== null)
+          .map(item => ({
+            id: item.id,
+            number: item.semesters.number,
+            created_at: item.semesters.created_at
+          })) as Semester[]
+        
+        // Sort by number
+        fetchedSems.sort((a, b) => a.number - b.number)
+        setSemesters(fetchedSems)
+      }
       setLoading(false)
     }
     load()
