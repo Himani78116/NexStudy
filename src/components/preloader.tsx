@@ -33,7 +33,7 @@ const Preloader = () => {
     }}
     >
       <motion.h1
-        className="text-9xl font-bold text-black flex gap-2 tracking-[0.35em] 
+        className="text-[2rem] sm:text-[3.5rem] md:text-9xl font-bold text-black flex gap-1 sm:gap-2 tracking-[0.15em] sm:tracking-[0.25em] md:tracking-[0.35em] drop-shadow-[0_4px_10px_rgba(0,0,0,0.3)] style text-9xl font-bold text-black flex gap-2 tracking-[0.35em] 
 drop-shadow-[0_4px_10px_rgba(0,0,0,0.3)] 
 [ text-shadow: 0px 2px 2px rgba(255,255,255,0.6), 0px -2px 4px rgba(0,0,0,0.2) ] style"
         variants={container}
