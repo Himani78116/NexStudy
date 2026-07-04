@@ -41,6 +41,7 @@ export default function SemesterCoursesPage() {
             code
           ),
           semesters (
+            id,
             number
           )
         `)
@@ -50,7 +51,15 @@ export default function SemesterCoursesPage() {
       if (bsErr) throw bsErr
       setBranchSemInfo(bsData)
 
-      // 2. Fetch courses linked to this branch_semester
+      const actualSemesterId = (bsData?.semesters as any)?.id; // Extract actual semester_id from the joined semesters table
+
+      if (!actualSemesterId) {
+        setError('Semester ID not found for the selected branch semester.');
+        setLoading(false);
+        return;
+      }
+
+      // 2. Fetch courses linked to this semester
       const { data: relData, error: relErr } = await supabase
         .from('semester_course')
         .select(`
@@ -62,7 +71,7 @@ export default function SemesterCoursesPage() {
             code
           )
         `)
-        .eq('branch_semesters_id', semId)
+        .eq('semester_id', actualSemesterId) // Use the actual semester_id from the 'semesters' table
       if (relErr) throw relErr
 
       const mapped = (relData ?? [])
@@ -91,6 +100,14 @@ export default function SemesterCoursesPage() {
     if (!courseName.trim()) return
     setError('')
     setSaving(true)
+
+    const actualSemesterId = (branchSemInfo?.semesters as any)?.id;
+    if (!actualSemesterId) {
+      setError('Semester information not loaded. Please try refreshing the page.');
+      setSaving(false);
+      return;
+    }
+
     try {
       // 1. Insert course
       const { data: newCourse, error: courseErr } = await supabase
@@ -108,7 +125,7 @@ export default function SemesterCoursesPage() {
       const { error: relErr } = await supabase
         .from('semester_course')
         .insert({
-          branch_semesters_id: semId,
+          semester_id: actualSemesterId, // Use the actual semester_id
           course_id: newCourse.id
         })
 

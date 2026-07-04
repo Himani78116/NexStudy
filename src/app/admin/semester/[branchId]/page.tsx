@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 import { useRouter, useParams } from 'next/navigation'
+import CrudList from '../../../../components/admin/CrudList'
 import type { Semester, Branch } from '@/types'
 
 export default function SemesterPage() {
@@ -14,6 +15,8 @@ export default function SemesterPage() {
   const router = useRouter()
 
   useEffect(() => {
+    if (!branchId) return
+
     async function load() {
       // Fetch branch name for the heading
       const { data: b } = await supabase
@@ -23,17 +26,39 @@ export default function SemesterPage() {
         .single()
       setBranch(b)
 
-      // Fetch semesters for this branch
-      const { data } = await supabase
-        .from('semesters')
-        .select('*')
+      // Fetch semesters through the branch_semesters join table
+      const { data, error } = await supabase
+        .from('branch_semesters')
+        .select(`
+          id,
+          semester_id,
+          semesters (
+            id,
+            number,
+            created_at
+          )
+        `)
         .eq('branch_id', branchId)
-        .order('number')
-      setSemesters(data ?? [])
+
+      if (error) {
+        console.error('Error fetching semesters:', error)
+        setSemesters([])
+      } else {
+        const fetchedSems = (data ?? [])
+          .filter((item): item is any => item && item.semesters !== null)
+          .map(item => ({
+            id: item.id,
+            number: item.semesters.number,
+            created_at: item.semesters.created_at
+          })) as Semester[]
+        
+        fetchedSems.sort((a, b) => a.number - b.number)
+        setSemesters(fetchedSems)
+      }
       setLoading(false)
     }
     load()
-  }, [])
+  }, [branchId])
 
   if (loading) return <p style={{ padding: 32 }}>Loading...</p>
 
