@@ -1,9 +1,14 @@
 // src/app/notes/[topicId]/page.tsx
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 import { useRouter, useParams } from 'next/navigation'
 import type { Note, Topic } from '@/types'
+
+interface ChatMessage {
+  role: 'user' | 'ai'
+  content: string
+}
 
 export default function NotesPage() {
   const params = useParams()
@@ -17,21 +22,39 @@ export default function NotesPage() {
   const [loading, setLoading] = useState(true)
   const router = useRouter()
 
+  // AI Doubt Solver state
+  const [showDoubtSolver, setShowDoubtSolver] = useState(false)
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
+  const [doubtQuestion, setDoubtQuestion] = useState('')
+  const [doubtLoading, setDoubtLoading] = useState(false)
+  const chatEndRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
       setUserId(user.id)
 
-      // Fetch topic info and its unit
+      // Fetch topic info (FK join to units does not exist in DB)
       const { data: t } = await supabase
         .from('topics')
-        .select('*, units(id, title, course_id)')
+        .select('*')
         .eq('id', topicId)
         .single()
       
       if (t) {
-        setTopic(t)
+        // Fetch unit info separately
+        const { data: u } = await supabase
+          .from('units')
+          .select('id, title, course_id')
+          .eq('id', t.unit_id)
+          .single()
+
+        setTopic({
+          ...t,
+          units: u || null
+        })
+
         // Fetch all topics in this unit to find the next one
         const { data: unitTopics } = await supabase
           .from('topics')
@@ -63,6 +86,11 @@ export default function NotesPage() {
     }
     load()
   }, [topicId, router])
+
+  // Auto-scroll chat to bottom
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [chatMessages])
 
   async function toggleComplete() {
     if (!userId || !topicId) return
@@ -107,6 +135,33 @@ export default function NotesPage() {
     }
   }
 
+  async function handleAskDoubt() {
+    if (!doubtQuestion.trim()) return
+
+    const userQuestion = doubtQuestion.trim()
+    setDoubtQuestion('')
+    setChatMessages(prev => [...prev, { role: 'user', content: userQuestion }])
+    setDoubtLoading(true)
+
+    try {
+      const res = await fetch('/api/ai/doubt-solve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topicId, question: userQuestion }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setChatMessages(prev => [...prev, { role: 'ai', content: '❌ ' + (data.error || 'Failed to get answer') }])
+      } else {
+        setChatMessages(prev => [...prev, { role: 'ai', content: data.answer }])
+      }
+    } catch (err: any) {
+      setChatMessages(prev => [...prev, { role: 'ai', content: '❌ Network error. Please try again.' }])
+    } finally {
+      setDoubtLoading(false)
+    }
+  }
+
   const currentIndex = allTopics.findIndex(t => t.id === topicId)
   const nextTopic = currentIndex !== -1 && currentIndex < allTopics.length - 1 ? allTopics[currentIndex + 1] : null
 
@@ -129,7 +184,7 @@ export default function NotesPage() {
               background: '#111', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 8, 
               cursor: 'pointer', fontSize: 13, fontWeight: 500, display: 'flex', alignItems: 'center', gap: 6 
             }}>
-            Next Topic: {nextTopic.title} →
+            Next Topic: {nextTopic.name} →
           </button>
         )}
       </div>
@@ -137,26 +192,50 @@ export default function NotesPage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, flexWrap: 'wrap', gap: 16 }}>
         <div>
            <p style={{ fontSize: 13, color: '#888', marginBottom: 4 }}>{unit?.title}</p>
-           <h1 style={{ fontSize: 24, fontWeight: 700 }}>{topic?.title}</h1>
+           <h1 style={{ fontSize: 24, fontWeight: 700 }}>{topic?.name}</h1>
         </div>
 
-        <button onClick={toggleComplete}
-          style={{ 
-            padding: '10px 20px', 
-            borderRadius: 8, 
-            fontSize: 14, 
-            fontWeight: 600,
-            transition: 'all 0.2s ease',
-            background: completed ? '#f0fdf4' : '#111', 
-            color: completed ? '#16a34a' : '#fff', 
-            border: completed ? '1px solid #86efac' : 'none', 
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8
-          }}>
-          {completed ? '✓ Completed' : 'Mark as done'}
-        </button>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          {notes.length > 0 && (
+            <button onClick={() => setShowDoubtSolver(true)}
+              style={{
+                padding: '10px 20px',
+                borderRadius: 8,
+                background: '#7c3aed',
+                color: '#fff',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                fontWeight: 600,
+                fontSize: 14,
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = '#6d28d9')}
+              onMouseLeave={e => (e.currentTarget.style.background = '#7c3aed')}
+            >
+              🤖 Ask AI
+            </button>
+          )}
+          <button onClick={toggleComplete}
+            style={{ 
+              padding: '10px 20px', 
+              borderRadius: 8, 
+              fontSize: 14, 
+              fontWeight: 600,
+              transition: 'all 0.2s ease',
+              background: completed ? '#f0fdf4' : '#111', 
+              color: completed ? '#16a34a' : '#fff', 
+              border: completed ? '1px solid #86efac' : 'none', 
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8
+            }}>
+            {completed ? '✓ Completed' : 'Mark as done'}
+          </button>
+        </div>
       </div>
 
       {notes.length === 0 ? (
@@ -216,6 +295,248 @@ export default function NotesPage() {
             </div>
           )}
         </>
+      )}
+
+      {/* AI Doubt Solver Modal */}
+      {showDoubtSolver && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.4)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            padding: 20,
+          }}
+          onClick={() => setShowDoubtSolver(false)}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: '#fff',
+              borderRadius: 16,
+              maxWidth: 640,
+              width: '100%',
+              height: '75vh',
+              display: 'flex',
+              flexDirection: 'column',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
+              overflow: 'hidden',
+            }}
+          >
+            {/* Header */}
+            <div
+              style={{
+                padding: '16px 24px',
+                borderBottom: '1px solid #eee',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                background: '#fff',
+                flexShrink: 0,
+              }}
+            >
+              <div>
+                <span style={{ fontWeight: 700, fontSize: 16 }}>🤖 AI Doubt Solver</span>
+                <p style={{ fontSize: 12, color: '#888', marginTop: 2 }}>Ask questions about {topic?.name}</p>
+              </div>
+              <button
+                onClick={() => setShowDoubtSolver(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: 20,
+                  color: '#888',
+                  padding: '4px 8px',
+                  borderRadius: 4,
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Chat Messages */}
+            <div
+              style={{
+                flex: 1,
+                overflowY: 'auto',
+                padding: '16px 24px',
+                background: '#fafafa',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 12,
+              }}
+            >
+              {chatMessages.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: 40, color: '#888' }}>
+                  <p style={{ fontSize: 28, marginBottom: 12 }}>🤔</p>
+                  <p style={{ fontWeight: 600, marginBottom: 4 }}>Got a doubt?</p>
+                  <p style={{ fontSize: 14 }}>
+                    Ask any question about this topic and the AI will answer based on the notes.
+                  </p>
+                </div>
+              ) : (
+                chatMessages.map((msg, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: 'flex',
+                      gap: 10,
+                      maxWidth: '90%',
+                      alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
+                    }}
+                  >
+                    {msg.role === 'ai' && (
+                      <div
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: '50%',
+                          background: '#7c3aed',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#fff',
+                          fontSize: 14,
+                          flexShrink: 0,
+                        }}
+                      >
+                        AI
+                      </div>
+                    )}
+                    <div
+                      style={{
+                        padding: '12px 16px',
+                        borderRadius: 12,
+                        fontSize: 14,
+                        lineHeight: 1.6,
+                        whiteSpace: 'pre-wrap',
+                        background: msg.role === 'user' ? '#7c3aed' : '#fff',
+                        color: msg.role === 'user' ? '#fff' : '#333',
+                        border: msg.role === 'ai' ? '1px solid #eee' : 'none',
+                        boxShadow: msg.role === 'ai' ? '0 2px 4px rgba(0,0,0,0.04)' : 'none',
+                      }}
+                    >
+                      {msg.content}
+                    </div>
+                  </div>
+                ))
+              )}
+              {doubtLoading && (
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center', alignSelf: 'flex-start' }}>
+                  <div
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: '50%',
+                      background: '#7c3aed',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#fff',
+                      fontSize: 14,
+                      flexShrink: 0,
+                    }}
+                  >
+                    AI
+                  </div>
+                  <div
+                    style={{
+                      padding: '12px 20px',
+                      borderRadius: 12,
+                      background: '#fff',
+                      border: '1px solid #eee',
+                      display: 'flex',
+                      gap: 6,
+                      alignItems: 'center',
+                    }}
+                  >
+                    <div style={{
+                      width: 8, height: 8,
+                      borderRadius: '50%',
+                      background: '#7c3aed',
+                      animation: 'doubtBounce 1s infinite 0s',
+                    }} />
+                    <div style={{
+                      width: 8, height: 8,
+                      borderRadius: '50%',
+                      background: '#7c3aed',
+                      animation: 'doubtBounce 1s infinite 0.2s',
+                    }} />
+                    <div style={{
+                      width: 8, height: 8,
+                      borderRadius: '50%',
+                      background: '#7c3aed',
+                      animation: 'doubtBounce 1s infinite 0.4s',
+                    }} />
+                    <style>{`
+                      @keyframes doubtBounce {
+                        0%, 80%, 100% { opacity: 0.3; transform: translateY(0); }
+                        40% { opacity: 1; transform: translateY(-4px); }
+                      }
+                    `}</style>
+                  </div>
+                </div>
+              )}
+              <div ref={chatEndRef} />
+            </div>
+
+            {/* Input */}
+            <div
+              style={{
+                padding: '12px 24px',
+                borderTop: '1px solid #eee',
+                background: '#fff',
+                display: 'flex',
+                gap: 12,
+                flexShrink: 0,
+              }}
+            >
+              <input
+                value={doubtQuestion}
+                onChange={e => setDoubtQuestion(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault()
+                    handleAskDoubt()
+                  }
+                }}
+                placeholder="Type your question about this topic..."
+                disabled={doubtLoading}
+                style={{
+                  flex: 1,
+                  padding: '12px 16px',
+                  borderRadius: 10,
+                  border: '1px solid #ddd',
+                  fontSize: 14,
+                  outline: 'none',
+                  background: doubtLoading ? '#f5f5f5' : '#fff',
+                }}
+              />
+              <button
+                onClick={handleAskDoubt}
+                disabled={doubtLoading || !doubtQuestion.trim()}
+                style={{
+                  padding: '12px 20px',
+                  borderRadius: 10,
+                  background: doubtLoading || !doubtQuestion.trim() ? '#ccc' : '#7c3aed',
+                  color: '#fff',
+                  border: 'none',
+                  cursor: doubtLoading || !doubtQuestion.trim() ? 'not-allowed' : 'pointer',
+                  fontWeight: 600,
+                  fontSize: 14,
+                  transition: 'all 0.2s ease',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Ask
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

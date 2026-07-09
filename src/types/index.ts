@@ -33,7 +33,7 @@ export interface Unit {
 export interface Topic {
   id: string
   unit_id: string
-  title: string
+  name: string
   order_index: number
   created_at: string
 }

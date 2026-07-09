@@ -20,7 +20,7 @@ export default function UnitsPage() {
         <CrudList
             table="units"
             label="Unit"
-            nameField="name"
+            nameField="title"
             filters={{ course_id: courseId }}
             extraData={{ course_id: courseId }}
             onSelect={unit => {

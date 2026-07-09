@@ -27,26 +27,62 @@ export default function UnitsPage() {
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) { router.push('/login'); return }
 
-        // Fetch Course with its Semester and Branch info
-        // We'll try a simpler join first if it fails
+        // 1. Fetch Course directly (FK join to semesters does not exist in DB)
         const { data: courseData, error: courseError } = await supabase
           .from('courses')
-          .select('*, semesters:semester_id(*, branches:branch_id(*))')
+          .select('*')
           .eq('id', courseId)
           .maybeSingle()
 
         if (courseError) {
           console.error('Course Error:', courseError)
-          // Fallback to simpler fetch
-          const { data: simpleCourse } = await supabase
-            .from('courses')
-            .select('*')
-            .eq('id', courseId)
-            .maybeSingle()
-          setCourse(simpleCourse)
-        } else {
-          setCourse(courseData)
+          setErrorInfo(courseError.message)
+          setLoading(false)
+          return
         }
+
+        if (!courseData) {
+          setErrorInfo('Course not found')
+          setLoading(false)
+          return
+        }
+
+        // 2. Fetch semester/branch info for breadcrumb via semester_course join table
+        let semNumber: number | null = null
+        let branchData: any = null
+        let branchSemId: string | null = null
+
+        const { data: relData } = await supabase
+          .from('semester_course')
+          .select('semester_id, semesters!inner(number)')
+          .eq('course_id', courseId)
+          .maybeSingle()
+
+        if (relData) {
+          const sem = Array.isArray(relData.semesters)
+            ? relData.semesters[0]
+            : relData.semesters
+          semNumber = sem?.number ?? null
+
+          const { data: bsData } = await supabase
+            .from('branch_semesters')
+            .select('id, branch_id, branches!inner(id, name, code)')
+            .eq('semester_id', relData.semester_id)
+            .maybeSingle()
+
+          if (bsData) {
+            branchSemId = bsData.id
+            branchData = Array.isArray(bsData.branches)
+              ? bsData.branches[0]
+              : bsData.branches
+          }
+        }
+
+        setCourse({
+          ...courseData,
+          semesters: semNumber ? { number: semNumber, branches: branchData } : null,
+          branchSemesterId: branchSemId
+        })
 
         // Fetch Units
         const { data: unitsData, error: unitsError } = await supabase
@@ -125,9 +161,9 @@ export default function UnitsPage() {
     </div>
   )
 
-  // Robust sem/branch extraction
+  // Extract breadcrumb info
   const sem = course?.semesters
-  const branch = sem?.branches || course?.branches
+  const branch = sem?.branches
 
   return (
     <div style={{ padding: '32px 20px', maxWidth: 700, margin: '0 auto' }}>
@@ -142,9 +178,9 @@ export default function UnitsPage() {
             <span>→</span>
           </>
         )}
-        {sem && (
+        {sem && course?.branchSemesterId && (
           <>
-            <span onClick={() => router.push(`/courses/${course.semester_id}`)} style={{ cursor: 'pointer', textDecoration: 'underline' }}>Sem {sem.number}</span>
+            <span onClick={() => router.push(`/courses/${course.branchSemesterId}`)} style={{ cursor: 'pointer', textDecoration: 'underline' }}>Sem {sem.number}</span>
             <span>→</span>
           </>
         )}
