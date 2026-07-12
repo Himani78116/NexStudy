@@ -151,7 +151,12 @@ export default function NotesPage() {
       })
       const data = await res.json()
       if (!res.ok) {
-        setChatMessages(prev => [...prev, { role: 'ai', content: '❌ ' + (data.error || 'Failed to get answer') }])
+        // Show details (specific extraction error) if available
+        const detailMsg = data.details
+          ? data.details.map((d: any) => `${d.title}: ${d.status}`).join('\n')
+          : ''
+        const fullMsg = '❌ ' + data.error + (detailMsg ? '\n\n' + detailMsg : '')
+        setChatMessages(prev => [...prev, { role: 'ai', content: fullMsg }])
       } else {
         setChatMessages(prev => [...prev, { role: 'ai', content: data.answer }])
       }

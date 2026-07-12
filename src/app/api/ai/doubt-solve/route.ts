@@ -1,7 +1,7 @@
 // src/app/api/ai/doubt-solve/route.ts
 import { NextResponse } from 'next/server'
 import { createSupabaseServerClient } from '@/lib/supabaseServer'
-import { extractNoteContent, answerDoubt } from '@/lib/ai'
+import { answerDoubt } from '@/lib/ai'
 
 export async function POST(req: Request) {
   try {
@@ -33,10 +33,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Topic not found' }, { status: 404 })
     }
 
-    // 2. Fetch all notes for this topic
+    // 2. Fetch all note titles for this topic
     const { data: notes, error: notesErr } = await supabase
       .from('notes')
-      .select('id, title, file_url, file_type')
+      .select('title')
       .eq('topic_id', topicId)
 
     if (notesErr) {
@@ -50,33 +50,11 @@ export async function POST(req: Request) {
       )
     }
 
-    // 3. Extract text content from each note (in parallel)
-    const notesContent = await Promise.all(
-      notes.map(async (note) => {
-        const content = await extractNoteContent(note.file_url, note.file_type)
-        // Log a warning if extraction produced an error placeholder
-        if (content.startsWith('__EXTRACTION_ERR__:')) {
-          console.warn(`Note "${note.title}" (id=${note.id}) extraction error: ${content}`)
-        }
-        return {
-          noteTitle: note.title,
-          content,
-        }
-      })
-    )
+    // 3. Pass just the note titles to the AI (no need to extract full file content)
+    const noteTitles = notes.map(n => n.title)
 
-    // Check if ALL notes returned error content (no real content extracted)
-    const hasRealContent = notesContent.some(n => !n.content.startsWith('__EXTRACTION_ERR__:'))
-    if (!hasRealContent) {
-      const sampleError = notesContent.find(n => n.content.startsWith('__EXTRACTION_ERR__:'))?.content || ''
-      return NextResponse.json({
-        error: `Could not extract readable content from any of the ${notes.length} note(s).`,
-        details: notesContent.map(n => ({ title: n.noteTitle, status: n.content })),
-      }, { status: 422 })
-    }
-
-    // 4. Answer the doubt
-    const answer = await answerDoubt(topic.name, notesContent, question)
+    // 4. Answer the doubt using topic name and note titles
+    const answer = await answerDoubt(topic.name, noteTitles, question)
 
     return NextResponse.json({
       answer,
