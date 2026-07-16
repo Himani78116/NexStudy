@@ -27,6 +27,15 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const router = useRouter()
 
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut()
+    } catch (err) {
+      console.error('Logout error:', err)
+    }
+    router.push('/login')
+  }
+
   useEffect(() => {
     async function loadDashboard() {
       try {
@@ -172,10 +181,16 @@ export default function Dashboard() {
       <div style={{ padding: 40, maxWidth: 800, margin: '0 auto' }}>
         <h1 style={{ marginBottom: 16 }}>Admin Portal</h1>
         <p style={{ marginBottom: 24, color: '#555' }}>Welcome, {profile.email}. You have administrative privileges.</p>
-        <button onClick={() => router.push('/admin/branches')}
-          style={{ padding: '12px 24px', background: '#111', color: '#fff', borderRadius: 8, border: 'none', cursor: 'pointer', fontWeight: 500 }}>
-          Manage Content →
-        </button>
+        <div style={{ display: 'flex', gap: 12 }}>
+          <button onClick={() => router.push('/admin/branches')}
+            style={{ padding: '12px 24px', background: '#111', color: '#fff', borderRadius: 8, border: 'none', cursor: 'pointer', fontWeight: 500 }}>
+            Manage Content →
+          </button>
+          <button onClick={handleLogout}
+            style={{ padding: '12px 24px', background: 'transparent', color: '#e00', border: '1px solid #e00', borderRadius: 8, cursor: 'pointer', fontWeight: 500 }}>
+            Logout
+          </button>
+        </div>
       </div>
     )
   }
@@ -189,10 +204,16 @@ export default function Dashboard() {
             {profile.branches?.name} • Semester {profile.semesters?.number}
           </p>
         </div>
-        <button onClick={() => router.push('/setup')}
-          style={{ padding: '8px 16px', background: '#f0f0f0', border: '1px solid #e5e5e5', borderRadius: 6, cursor: 'pointer', fontSize: 13, fontWeight: 500 }}>
-          Change Branch/Sem
-        </button>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button onClick={() => router.push('/setup')}
+            style={{ padding: '8px 16px', background: '#f0f0f0', border: '1px solid #e5e5e5', borderRadius: 6, cursor: 'pointer', fontSize: 13, fontWeight: 500 }}>
+            Change Branch/Sem
+          </button>
+          <button onClick={handleLogout}
+            style={{ padding: '8px 16px', background: 'transparent', border: '1px solid #e00', borderRadius: 6, cursor: 'pointer', fontSize: 13, fontWeight: 500, color: '#e00' }}>
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Overall Progress Card */}
