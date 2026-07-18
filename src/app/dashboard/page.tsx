@@ -37,6 +37,8 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
+    let mounted = true
+
     async function loadDashboard() {
       try {
         const { data: { user } } = await supabase.auth.getUser()
@@ -54,11 +56,12 @@ export default function Dashboard() {
           return
         }
 
-        setProfile(profileData)
+        if (mounted) setProfile(profileData)
+        if (!mounted) return
 
         // ADMIN CHECK FIRST - before branch/sem check
         if (profileData.role === 'admin') {
-          setLoading(false)
+          if (mounted) setLoading(false)
           return
         }
 
@@ -77,8 +80,10 @@ export default function Dashboard() {
         }
 
         if (!courses || courses.length === 0) {
-          setProgress({ overallPct: 0, totalTopics: 0, completedTopics: 0, courses: [] })
-          setLoading(false)
+          if (mounted) {
+            setProgress({ overallPct: 0, totalTopics: 0, completedTopics: 0, courses: [] })
+            setLoading(false)
+          }
           return
         }
 
@@ -158,20 +163,26 @@ export default function Dashboard() {
           }
         })
 
-        setProgress({
-          overallPct: totalTopicsSem === 0 ? 0 : Math.round((completedTopicsSem / totalTopicsSem) * 100),
-          totalTopics: totalTopicsSem,
-          completedTopics: completedTopicsSem,
-          courses: coursesWithProgress
-        })
+        if (mounted) {
+          setProgress({
+            overallPct: totalTopicsSem === 0 ? 0 : Math.round((completedTopicsSem / totalTopicsSem) * 100),
+            totalTopics: totalTopicsSem,
+            completedTopics: completedTopicsSem,
+            courses: coursesWithProgress
+          })
+          setLoading(false)
+        }
       } catch (err) {
         console.error('Error loading dashboard:', err)
-      } finally {
-        setLoading(false)
+        if (mounted) setLoading(false)
       }
     }
 
     loadDashboard()
+
+    return () => {
+      mounted = false
+    }
   }, [router])
 
   if (loading || !profile) return <div style={{ padding: 40, textAlign: 'center', color: '#888' }}>Loading Dashboard...</div>
