@@ -50,6 +50,79 @@ Welcome to **NexStudy**! NexStudy is a platform for university students to find 
     ```bash
     npm run dev
     ```
+---
+
+## Running Tests
+
+This project uses **Jest** with **React Testing Library** for unit tests. All test files are located in the `__tests__/` directory.
+
+### 1. Prerequisites
+
+Make sure you have [Node.js](https://nodejs.org/) (v18 or later) and npm installed.
+
+```bash
+node --version   # Should be v18+
+npm --version    # Should be v9+
+```
+
+### 2. Install Dependencies
+
+If you haven't already, install all project dependencies including the test libraries:
+
+```bash
+npm install
+```
+
+This installs everything needed — Jest, ts-jest, React Testing Library, and all type definitions.
+
+### 3. Run the Tests
+
+Run all tests once:
+
+```bash
+npm test
+```
+
+Run tests in watch mode (re-runs automatically when files change):
+
+```bash
+npm run test:watch
+```
+
+Run tests with verbose output (shows each test name):
+
+```bash
+npx jest --verbose
+```
+
+Run a specific test file:
+
+```bash
+npx jest dashboard
+npx jest login
+npx jest navbar
+```
+
+### 4. What Gets Tested
+
+| Test File | What It Covers |
+|-----------|----------------|
+| `__tests__/dashboard.test.tsx` | Auth redirects, admin/student views, logout functionality, progress display, empty states |
+| `__tests__/login.test.tsx` | Form rendering, successful login, failed login errors, navigation to signup |
+| `__tests__/signup.test.tsx` | Form rendering, successful signup flow, failed signup errors, navigation to login |
+| `__tests__/navbar.test.tsx` | Logo rendering, login/signup button navigation |
+
+### 5. Test Output Example
+
+```
+PASS  __tests__/navbar.test.tsx
+PASS  __tests__/login.test.tsx
+PASS  __tests__/signup.test.tsx
+PASS  __tests__/dashboard.test.tsx
+
+Test Suites: 4 passed, 4 total
+Tests:       35 passed, 35 total
+```
 
 ---
 
