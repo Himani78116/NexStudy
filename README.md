@@ -28,7 +28,7 @@ Welcome to **NexStudy**! NexStudy is a platform for university students to find 
 
 ## Getting Started
 
-1.  **Fork the repository** on GitHub by clicking the "Fork" button at the top-right of the [NexStudy repo page](https://github.com/your-username/nexstudy).
+1.  **Fork the repository** on GitHub by clicking the "Fork" button at the top-right of the [NexStudy repo page](https://github.com/Himani78116/NexStudy).
 
 2.  **Clone your fork:**
     ```bash
