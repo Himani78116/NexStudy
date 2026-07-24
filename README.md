@@ -28,25 +28,28 @@ Welcome to **NexStudy**! NexStudy is a platform for university students to find 
 
 ## Getting Started
 
-1.  **Clone the project:**
+1.  **Fork the repository** on GitHub by clicking the "Fork" button at the top-right of the [NexStudy repo page](https://github.com/your-username/nexstudy).
+
+2.  **Clone your fork:**
     ```bash
-    git clone https://github.com/your-username/nexstudy.git
+    git clone https://github.com/<your-username>/nexstudy.git
     cd nexstudy
     ```
 
-2.  **Install dependencies:**
+3.  **Install dependencies:**
     ```bash
     npm install
     ```
 
-3.  **Set up environment variables:**
+4.  **Set up environment variables:**
     Create a `.env` file in the root and add your Supabase credentials:
     ```env
     NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
     NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+    GROQ_API_KEY = your_groq_api_key
     ```
 
-4.  **Run the app:**
+5.  **Run the app:**
     ```bash
     npm run dev
     ```
@@ -128,10 +131,18 @@ Tests:       35 passed, 35 total
 
 ## Project Structure
 
-Below is the complete structure of the `src/app` directory to help you navigate the routes:
+Below is the project structure to help you navigate the codebase:
 
 ```text
 nexstudy/
+├── __tests__/          # Unit tests (Jest + React Testing Library)
+│   ├── dashboard.test.tsx
+│   ├── fileMock.ts
+│   ├── login.test.tsx
+│   ├── navbar.test.tsx
+│   ├── setup.ts
+│   ├── signup.test.tsx
+│   └── styleMock.ts
 ├── src/
 │   ├── app/                    # Routes and Pages (Next.js App Router)
 │   │   ├── admin/              # Admin Dashboard Area
@@ -143,6 +154,10 @@ nexstudy/
 │   │   │   ├── semesters/      # Semester overview/management
 │   │   │   ├── topics/         # Manage topics
 │   │   │   └── units/          # Manage units
+│   │   ├── api/                # API routes (Next.js Route Handlers)
+│   │   │   └── ai/
+│   │   │       ├── doubt-solve/route.ts   # AI doubt solver
+│   │   │       └── summarize/route.ts     # AI summarizer
 │   │   ├── courses/[semId]/    # List of courses for a specific semester
 │   │   ├── dashboard/          # User Progress Dashboard
 │   │   ├── login/              # Login page
