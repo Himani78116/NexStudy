@@ -6,7 +6,7 @@ const groq = new Groq({
 })
 
 // Models available on Groq (as of latest)
-const TEXT_MODEL = 'llama-3.3-70b-versatile'
+const TEXT_MODEL = 'openai/gpt-oss-120b'
 const VISION_MODEL = 'llama-3.2-90b-vision-preview'
 
 /**
